@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TripSwarm – AI-Powered Multi-Agent Travel Planner</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/static/css/home.css" rel="stylesheet"/>
+
+</head>
+<body>
+
+<canvas id="swarm-canvas"></canvas>
+
+<!-- Terms Modal -->
+
+<div id="terms-modal" role="dialog" aria-modal="true" aria-labelledby="terms-title">
+  <div class="terms-modal-inner">
+    <h2 id="terms-title">Before you continue</h2>
+    <p class="terms-sub">TripSwarm will access the following from your Google account to create and manage your profile:</p>
+
+    <div class="terms-perm-item">
+      <span class="icon">👤</span>
+      <div>
+        <p class="perm-title">Full name</p>
+        <p class="perm-sub">Used to personalise your experience</p>
+      </div>
+    </div>
+    <div class="terms-perm-item">
+      <span class="icon">✉️</span>
+      <div>
+        <p class="perm-title">Email address</p>
+        <p class="perm-sub">Used as your account identifier</p>
+      </div>
+    </div>
+    <div class="terms-perm-item">
+      <span class="icon">🖼️</span>
+      <div>
+        <p class="perm-title">Profile picture</p>
+        <p class="perm-sub">Displayed on your account avatar</p>
+      </div>
+    </div>
+
+    <p class="terms-note">
+      We never sell your data or share it with third parties.<br>
+      By continuing you agree to our <a href="/terms">Terms of Service</a>.
+    </p>
+
+    <div class="terms-btn-row">
+      <button class="terms-cancel" onclick="closeTermsModal()">Cancel</button>
+      <a id="terms-agree-btn" href="/auth/login" class="terms-agree">Agree &amp; Continue</a>
+    </div>
+  </div>
+</div>
+
+<!-- Navbar -->
+
+<nav class="ts-navbar" id="mainNav">
+  <div class="container">
+    <div class="d-flex align-items-center justify-content-between w-100">
+
+      <a class="navbar-brand d-flex align-items-center gap-2" href="/">
+        <img
+          src="/static/images/Trip_Swarm_Logo.png"
+          height="40px"
+          width="40px"
+          alt="Trip Swarm"
+          class="brand-logo"
+          onerror="this.style.display='none'; document.getElementById('brand-fb').style.display='flex';"
+        />
+        Trip<span>Swarm</span>
+      </a>
+
+      <!-- Desktop Nav -->
+
+      <ul class="navbar-nav d-none d-lg-flex flex-row align-items-center gap-1 mb-0">
+        <li class="nav-item"><a class="nav-link active" href="#home">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#try-it">Try It</a></li>
+        <li class="nav-item"><a class="nav-link" href="#about">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#how-it-works">How It Works</a></li>
+        <li class="nav-item"><a class="nav-link" href="#contact">Contact</a></li>
+        <li class="nav-item ms-2" id="nav-auth-area">
+          <!-- Injected by JS based on session -->
+        </li>
+      </ul>
+
+      <!-- Mobile Toggler -->
+
+      <button class="navbar-toggler d-lg-none" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+
+    <!-- Mobile Menu -->
+
+    <div class="collapse" id="mobileMenu">
+      <ul class="navbar-nav pt-3 pb-2 d-flex flex-column gap-1">
+        <li class="nav-item"><a class="nav-link" href="#home" onclick="closeMobileMenu()">Home</a></li>
+        <li class="nav-item"><a class="nav-link" href="#try-it" onclick="closeMobileMenu()">Try It</a></li>
+        <li class="nav-item"><a class="nav-link" href="#about" onclick="closeMobileMenu()">About</a></li>
+        <li class="nav-item"><a class="nav-link" href="#how-it-works" onclick="closeMobileMenu()">How It Works</a></li>
+        <li class="nav-item"><a class="nav-link" href="#contact" onclick="closeMobileMenu()">Contact</a></li>
+        <li class="nav-item mt-2" id="mobile-auth-area">
+          <!-- Injected by JS -->
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+
+<section id="home">
+  <div class="container">
+    <div class="row align-items-center g-4">
+
+      <!-- Left -->
+
+      <div class="col-lg-7 hero-left reveal">
+        <div class="hero-eyebrow">
+          <i class="bi bi-lightning-charge-fill"></i>
+          Multi-Agent AI · LangGraph · Real-time
+        </div>
+        <h1 class="hero-title">
+          Plan Smarter<br>Trips with an<br>
+          <span class="accent">AI Swarm</span> of<br>
+          <span class="accent-gold">Agents</span>
+        </h1>
+        <p class="hero-sub">
+          TripSwarm deploys a swarm of specialized AI agents — flight finder, hotel scout, itinerary builder — to craft your perfect trip in seconds. Powered by LangGraph.
+        </p>
+
+        <div id="hero-cta-area">
+          <!-- Injected by JS -->
+        </div>
+
+        <div class="hero-trust" id="hero-trust">
+          <div class="hero-trust-pill"><i class="bi bi-shield-lock-fill"></i><span>Secure OAuth 2.0</span></div>
+          <div class="hero-trust-pill"><i class="bi bi-lock-fill"></i><span>JWT Protected</span></div>
+        </div>
+      </div>
+
+      <!-- RIGHT: Carousel -->
+
+      <div class="col-lg-5 hero-right reveal" style="transition-delay:0.1s;">
+        <div class="demo-carousel-wrap" id="demoCarousel">
+          <div class="demo-card active" data-index="0">
+            <div class="card-tag"><i class="bi bi-calendar3"></i> Itinerary Planner</div>
+            <div class="card-screen">
+              <div class="card-screen-header">
+                <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+                <span style="color:var(--muted);font-size:0.7rem;margin-left:8px;">tripswarm.ai / planner</span>
+              </div>
+              <div class="agent-badge"><i class="bi bi-robot"></i> Flight Agent</div>
+              <div class="agent-badge"><i class="bi bi-building"></i> Hotel Agent</div>
+              <div class="agent-badge"><i class="bi bi-map"></i> Itinerary Agent</div>
+              <div style="margin-top:10px;">
+                <div class="mock-line long"></div><div class="mock-line med gold"></div>
+                <div class="mock-line short"></div><div class="mock-line med"></div>
+              </div>
+            </div>
+            <h3 class="card-title">📅 7-Day Bali Itinerary</h3>
+            <p class="card-desc">AI-generated day-by-day plan with local food picks, attractions & budget estimate — ready in 8 seconds.</p>
+          </div>
+          <div class="demo-card behind1" data-index="1">
+            <div class="card-tag"><i class="bi bi-chat-dots"></i> Travel Q&A</div>
+            <div class="card-screen">
+              <div class="card-screen-header">
+                <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+                <span style="color:var(--muted);font-size:0.7rem;margin-left:8px;">RAG · ChromaDB + BM25</span>
+              </div>
+              <div style="font-size:0.72rem;color:var(--muted);margin-bottom:8px;"><span style="color:var(--teal);">You:</span> What's the visa policy for India → Japan?</div>
+              <div style="font-size:0.72rem;color:var(--white);"><span style="color:var(--gold);">TripSwarm:</span> Indian passport holders can obtain a Japan tourist visa (Tanki)...</div>
+              <div class="mock-line long" style="margin-top:10px;"></div><div class="mock-line short"></div>
+            </div>
+            <h3 class="card-title">🔍 Agentic RAG Q&A</h3>
+            <p class="card-desc">Upload your travel docs. Ask anything. Hybrid semantic + keyword search gives accurate, sourced answers.</p>
+          </div>
+         
+          <div class="demo-card behind2" data-index="2">
+            <div class="card-tag"><i class="bi bi-airplane"></i> Flight Finder</div>
+            <div class="card-screen">
+              <div class="card-screen-header">
+                <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+                <span style="color:var(--muted);font-size:0.7rem;margin-left:8px;">AviationStack · Tavily</span>
+              </div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
+                <span style="font-size:0.82rem;font-weight:700;">MAA → NRT</span>
+                <span style="font-size:0.7rem;color:var(--teal);">Multiple carriers</span>
+              </div>
+              <div class="mock-line long gold"></div><div class="mock-line med"></div>
+              <div style="font-size:0.7rem;color:var(--muted);margin-top:8px;">IndiGo · Air Asia · Singapore Airlines...</div>
+            </div>
+            <h3 class="card-title">✈️ Live Flight Search</h3>
+            
+            <p class="card-desc">Real-time flight data — airlines, durations, routes and schedules — surfaced by the Flight Research Agent.</p>
+          </div>
+        </div>
+        <div class="carousel-dots" id="carouselDots">
+          <div class="c-dot active" onclick="goToCard(0)"></div>
+          <div class="c-dot" onclick="goToCard(1)"></div>
+          <div class="c-dot" onclick="goToCard(2)"></div>
+        </div>
+        <p class="swipe-hint"><i class="bi bi-hand-index"></i> Click cards to browse demos</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- Try It -->
+
+<section id="try-it">
+  <hr class="divider-line">
+  <div class="container">
+    <div class="text-center mb-2">
+      <div class="section-label mx-auto"><span>Try TripSwarm</span></div>
+      <h2 class="section-title reveal">Chat with the <span class="teal">AI Travel Brain</span></h2>
+      <p class="section-sub reveal" style="transition-delay:0.1s;">
+        Pick a mode — plan a full trip or ask a travel question. Sign in to unlock the full experience.
+      </p>
+    </div>
+
+    <div class="chat-widget reveal" style="transition-delay:0.15s;">
+      <div class="chat-header">
+        <div class="chat-logo">🌍</div>
+        <div>
+          <div class="chat-header-title">TripSwarm Assistant</div>
+          <div class="chat-header-sub">Powered by Multi-Agent AI · LangGraph</div>
+        </div>
+        <div class="chat-status"></div>
+      </div>
+
+      <div class="chat-tabs">
+        <button class="chat-tab active" id="tabPlan" onclick="switchChatTab('plan')">
+          <i class="bi bi-map-fill"></i> Travel Plan
+        </button>
+        <button class="chat-tab" id="tabQA" onclick="switchChatTab('qa')">
+          <i class="bi bi-patch-question-fill"></i> Ask Q&amp;A
+        </button>
+      </div>
+
+      <div class="chat-messages" id="chatMessages">
+        <div class="msg msg-ai">
+          <div class="msg-sender">TripSwarm</div>
+          <span id="welcomeMsg">🗺️ Tell me where you want to go! I'll deploy Flight, Hotel &amp; Itinerary agents to plan your perfect trip.</span>
+        </div>
+      </div>
+
+      <div id="chat-bottom-area"></div>
+    </div>
+  </div>
+</section>
+
+<!-- About -->
+
+<section id="about">
+  <hr class="divider-line">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-label mx-auto"><span>About TripSwarm</span></div>
+      <h2 class="section-title reveal">Everything Your Trip Needs,<br><span class="teal">Handled by Agents</span></h2>
+      <div class="glow-sep mt-3"></div>
+    </div>
+    <div class="row g-4 mb-5">
+      <div class="col-md-6 col-lg-4 reveal"><div class="feature-card h-100">
+        <div class="feature-icon icon-teal"><i class="bi bi-robot"></i></div>
+        <h4>Multi-Agent Swarm</h4>
+        <p>Four specialized agents — Flight, Hotel, Itinerary, and Response — collaborate via LangGraph to build your travel plan end-to-end.</p>
+      </div></div>
+      <div class="col-md-6 col-lg-4 reveal" style="transition-delay:0.05s;"><div class="feature-card h-100">
+        <div class="feature-icon icon-gold"><i class="bi bi-search"></i></div>
+        <h4>Agentic RAG</h4>
+        <p>Upload PDFs, DOCX, or TXT travel docs. The RAG agent uses ChromaDB + BM25 hybrid search to give sourced, accurate answers.</p>
+      </div></div>
+      <div class="col-md-6 col-lg-4 reveal" style="transition-delay:0.1s;"><div class="feature-card h-100">
+        <div class="feature-icon icon-blue"><i class="bi bi-airplane-fill"></i></div>
+        <h4>Live Flight Data</h4>
+        
+        <p>Real-time flight information via AviationStack and Tavily — airlines, durations, routes and schedules surfaced instantly.</p>
+      </div></div>
+      <div class="col-md-6 col-lg-4 reveal" style="transition-delay:0.05s;"><div class="feature-card h-100">
+        <div class="feature-icon icon-green"><i class="bi bi-building"></i></div>
+        <h4>Hotel Recommendations</h4>
+        <p>Budget, mid-range, and luxury hotel picks with nearby accommodations tailored to your destination and travel style.</p>
+      </div></div>
+      <div class="col-md-6 col-lg-4 reveal" style="transition-delay:0.1s;"><div class="feature-card h-100">
+        <div class="feature-icon icon-purple"><i class="bi bi-chat-square-dots-fill"></i></div>
+        <h4>Persistent Chat History</h4>
+        <p>All your trip conversations are saved in PostgreSQL — pick up exactly where you left off, manage multiple threads.</p>
+      </div></div>
+      <div class="col-md-6 col-lg-4 reveal" style="transition-delay:0.15s;"><div class="feature-card h-100">
+        <div class="feature-icon icon-orange"><i class="bi bi-file-earmark-pdf-fill"></i></div>
+        <h4>AI Travel Reports</h4>
+        <p>Download professionally formatted Markdown travel reports — complete itinerary, flights, hotels, tips, and highlights in one file.</p>
+      </div></div>
+    </div>
+
+    <!-- Agent Flow -->
+
+    <div class="row align-items-center g-5 mt-2">
+      <div class="col-lg-6 reveal">
+        <div class="section-label"><span>How Agents Collaborate</span></div>
+        <h3 class="section-title" style="font-size:1.8rem;">The Swarm in Action</h3>
+        <p style="color:var(--muted);font-size:0.9rem;line-height:1.75;margin-top:0.8rem;">
+          When you ask TripSwarm to plan a trip, it doesn't use a single AI. It orchestrates a <strong style="color:var(--teal);">graph of specialized agents</strong> via LangGraph, each handing off enriched context to the next — like a swarm of experts collaborating on your behalf.
+        </p>
+        <div class="tech-stack-row" style="justify-content:flex-start;margin-top:1.5rem;">
+          <span class="tech-pill">FastAPI</span><span class="tech-pill">LangGraph</span>
+          <span class="tech-pill">Groq LLM</span><span class="tech-pill">ChromaDB</span>
+          <span class="tech-pill">PostgreSQL</span><span class="tech-pill">Tavily</span>
+        </div>
+      </div>
+      <div class="col-lg-6 reveal" style="transition-delay:0.1s;">
+        <div class="agent-flow">
+          <p style="color:var(--muted);font-size:0.75rem;margin-bottom:14px;text-transform:uppercase;letter-spacing:0.8px;">Live agent pipeline</p>
+          <div class="agent-node" id="nodeUser"><div class="node-icon icon-teal"><i class="bi bi-person-fill"></i></div><span>User Query</span><span class="flow-badge">Input</span></div>
+          <div class="node-arrow"><i class="bi bi-arrow-down"></i></div>
+          <div class="agent-node" id="nodeFlight"><div class="node-icon icon-blue"><i class="bi bi-airplane-fill"></i></div><span>Flight Research Agent</span><span class="flow-badge">Agent 1</span></div>
+          <div class="node-arrow"><i class="bi bi-arrow-down"></i></div>
+          <div class="agent-node" id="nodeHotel"><div class="node-icon icon-green"><i class="bi bi-building"></i></div><span>Hotel Recommendation Agent</span><span class="flow-badge">Agent 2</span></div>
+          <div class="node-arrow"><i class="bi bi-arrow-down"></i></div>
+          <div class="agent-node" id="nodeItinerary"><div class="node-icon icon-gold"><i class="bi bi-map-fill"></i></div><span>Itinerary Planning Agent</span><span class="flow-badge">Agent 3</span></div>
+          <div class="node-arrow"><i class="bi bi-arrow-down"></i></div>
+          <div class="agent-node" id="nodeResponse"><div class="node-icon icon-purple"><i class="bi bi-file-earmark-text-fill"></i></div><span>Response Formatting Agent</span><span class="flow-badge">Agent 4</span></div>
+          <div class="node-arrow"><i class="bi bi-arrow-down"></i></div>
+          <div class="agent-node" id="nodeOutput" style="border-color:var(--gold);"><div class="node-icon icon-orange"><i class="bi bi-download"></i></div><span>AI Travel Report</span><span class="flow-badge" style="background:rgba(245,166,35,0.12);color:var(--gold);">Output</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- How it Works -->
+ 
+<section id="how-it-works">
+  <hr class="divider-line">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-label mx-auto"><span>Getting Started</span></div>
+      <h2 class="section-title reveal">Trip Planning in<br><span class="teal">4 Simple Steps</span></h2>
+    </div>
+    <div class="row g-5 align-items-start">
+      <div class="col-lg-6 reveal">
+        <div class="step-item"><div class="step-num">01</div><div class="step-content"><h4>Sign in with Google</h4><p>One click, no passwords. Your account is secured via Google OAuth 2.0 and a JWT session token is issued instantly.</p></div></div>
+        
+        <div class="step-item"><div class="step-num">02</div><div class="step-content"><h4>Choose Your Mode</h4><p>Head to <strong style="color:var(--teal);">Travel Plan</strong> to build a full trip, or <strong style="color:var(--teal);">Ask Q&amp;A</strong> to get RAG-powered answers from your uploaded travel documents.</p></div></div>
+        <div class="step-item"><div class="step-num">03</div><div class="step-content"><h4>Describe Your Dream Trip</h4><p>Type naturally — destination, duration, preferences. The AI swarm kicks in immediately and coordinates all four agents in parallel.</p></div></div>
+        <div class="step-item"><div class="step-num">04</div><div class="step-content"><h4>Get Your Travel Report</h4><p>Receive a full itinerary with flights, hotels, day-by-day plans, food tips, and highlights — downloadable as a report.</p></div></div>
+      </div>
+
+      <!-- Quick Trip Builder -->
+      <div class="col-lg-6 reveal" style="transition-delay:0.1s;">
+        <div style="background:var(--card-bg);border:1px solid rgba(0,212,200,0.12);border-radius:20px;padding:28px;backdrop-filter:blur(16px);">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px;">
+            <span style="font-size:1.4rem;">🌏</span>
+            <div>
+              <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:0.95rem;">Quick Trip Builder</div>
+              <div style="color:var(--muted);font-size:0.72rem;">Preview how TripSwarm responds</div>
+            </div>
+          </div>
+
+          <div style="background:var(--navy-mid);border-radius:12px;padding:16px;margin-bottom:14px;">
+            <div style="font-size:0.75rem;color:var(--muted);margin-bottom:8px;">Choose a destination</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;" id="destBtns">
+              <button class="dest-btn" onclick="pickDest('Tokyo 🇯🇵')">Tokyo 🇯🇵</button>
+              <button class="dest-btn" onclick="pickDest('Bali 🇮🇩')">Bali 🇮🇩</button>
+              <button class="dest-btn" onclick="pickDest('Paris 🇫🇷')">Paris 🇫🇷</button>
+              <button class="dest-btn" onclick="pickDest('Dubai 🇦🇪')">Dubai 🇦🇪</button>
+            </div>
+          </div>
+
+          <div id="destPreview" style="display:none;background:rgba(0,212,200,0.06);border:1px solid rgba(0,212,200,0.15);border-radius:12px;padding:16px;">
+            <div style="font-size:0.72rem;color:var(--teal);font-weight:600;margin-bottom:8px;">TRIPSWARM PREVIEW</div>
+            <div id="destPreviewText" style="font-size:0.83rem;line-height:1.65;color:var(--white);margin-bottom:14px;"></div>
+            <div id="dest-cta-area"></div>
+          </div>
+
+          <div style="margin-top:14px;padding:12px;background:rgba(245,166,35,0.06);border-radius:10px;border:1px solid rgba(245,166,35,0.12);">
+            <div style="font-size:0.75rem;color:var(--gold);font-weight:600;margin-bottom:6px;"><i class="bi bi-stars"></i> Coming Soon</div>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;">
+              <span class="tech-pill">Flight Booking</span><span class="tech-pill">Hotel Booking</span>
+              <span class="tech-pill">Visa Assistance</span><span class="tech-pill">Weather Agent</span>
+              <span class="tech-pill">Voice Assistant</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Contact -->
+<section id="contact">
+  <hr class="divider-line">
+  <div class="container">
+    <div class="text-center mb-5">
+      <div class="section-label mx-auto"><span>Contact & Connect</span></div>
+      <h2 class="section-title reveal">Built with <span class="gold">Passion</span> by<br>Saravanan S</h2>
+    </div>
+    <div class="contact-card reveal">
+      <div style="font-size:3rem;margin-bottom:16px;">👨‍💻</div>
+      <h3 style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:10px;">Saravanan S</h3>
+      <p style="color:var(--muted);font-size:0.9rem;line-height:1.7;max-width:480px;margin:0 auto 8px;">
+        Full-stack AI engineer passionate about multi-agent systems, LLM applications, and building tools that actually make life easier. TripSwarm is a showcase of LangGraph-based swarm architecture in a real-world app.
+      </p>
+      <div class="contact-links">
+        <a href="https://github.com/Saravanan131201" target="_blank" class="contact-link github"><i class="bi bi-github"></i> GitHub</a>
+        <a href="https://www.linkedin.com/in/saravanan-s1312" target="_blank" class="contact-link linkedin"><i class="bi bi-linkedin"></i> LinkedIn</a>
+        <a href="https://github.com/Saravanan131201/Tripswarm-using-Langgraph" target="_blank" class="contact-link email"><i class="bi bi-code-square"></i> Source Code</a>
+      </div>
+      <div style="margin-top:28px;padding-top:24px;border-top:1px solid rgba(255,255,255,0.06);">
+        <p style="color:var(--muted);font-size:0.78rem;margin-bottom:14px;text-transform:uppercase;letter-spacing:0.6px;">Tech Stack</p>
+        <div class="tech-stack-row">
+          <span class="tech-pill">Python</span><span class="tech-pill">FastAPI</span>
+          <span class="tech-pill">LangGraph</span><span class="tech-pill">LangChain</span>
+          <span class="tech-pill">Groq</span><span class="tech-pill">ChromaDB</span>
+          <span class="tech-pill">PostgreSQL</span><span class="tech-pill">Jinja2</span>
+          <span class="tech-pill">Bootstrap</span><span class="tech-pill">Docker</span>
+          <span class="tech-pill">Render</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="ts-footer">
+  <div class="container">
+    <div class="row g-4">
+      <div class="col-lg-4 col-md-6">
+        <div class="footer-brand">Trip<span>Swarm</span></div>
+        <p class="footer-tagline">AI-powered multi-agent travel planning. Built with LangGraph, FastAPI, PostgreSQL.</p>
+        <div class="footer-social">
+          <a href="https://github.com/Saravanan131201" target="_blank"><i class="bi bi-github"></i></a>
+          <a href="https://www.linkedin.com/in/saravanan-s1312" target="_blank"><i class="bi bi-linkedin"></i></a>
+          <a href="https://github.com/Saravanan131201/Tripswarm-using-Langgraph" target="_blank"><i class="bi bi-code-square"></i></a>
+        </div>
+      </div>
+      <div class="col-lg-2 col-md-3 col-6">
+        <div class="footer-heading">Navigate</div>
+        <ul class="footer-links">
+          <li><a href="#home">Home</a></li><li><a href="#try-it">Try It</a></li>
+          <li><a href="#about">About</a></li><li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="#contact">Contact</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-2 col-md-3 col-6">
+        <div class="footer-heading">Features</div>
+        <ul class="footer-links">
+          <li><a href="#about">Multi-Agent AI</a></li><li><a href="#about">Agentic RAG</a></li>
+          <li><a href="#about">Flight Search</a></li><li><a href="#about">Hotel Picks</a></li>
+          <li><a href="#about">Travel Reports</a></li>
+        </ul>
+      </div>
+      <div class="col-lg-4 col-md-6">
+        <div class="footer-heading">Quick Start</div>
+        <p style="color:var(--muted);font-size:0.82rem;line-height:1.6;margin-bottom:14px;">
+          Sign in with Google and start planning your dream trip in seconds. No setup, no password — just AI-powered travel planning.
+        </p>
+        <div id="footer-cta-area"></div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>© 2025 TripSwarm · Built by <a href="https://github.com/Saravanan131201" target="_blank" style="color:var(--teal);text-decoration:none;">Saravanan S</a> · All rights reserved.</p>
+      <div class="footer-social">
+        <a href="https://github.com/Saravanan131201" target="_blank"><i class="bi bi-github"></i></a>
+        <a href="https://www.linkedin.com/in/saravanan-s1312" target="_blank"><i class="bi bi-linkedin"></i></a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div id="ts-toast">
+  <i class="bi bi-info-circle-fill" style="color:var(--teal);"></i>
+  <span id="toastMsg"></span>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script src="/static/js/home.js"></script>
+
+</body>
+</html>

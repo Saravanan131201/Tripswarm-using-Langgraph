@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Trip Swarm</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  min-height: 100vh;
+  background: #06091a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  overflow: hidden;
+}
+
+#star-canvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.orbs {
+  position: fixed;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0;
+  animation: orb-appear 1.4s ease-out forwards;
+}
+.orb-1 {
+  width: 700px; height: 700px;
+  background: radial-gradient(circle, #1d3f8a 0%, transparent 70%);
+  top: -180px; left: -180px;
+  animation-delay: 0.1s;
+  animation-name: orb-appear, orb-drift1;
+  animation-duration: 1.4s, 20s;
+  animation-timing-function: ease-out, ease-in-out;
+  animation-fill-mode: forwards, none;
+  animation-iteration-count: 1, infinite;
+  animation-direction: normal, alternate;
+}
+.orb-2 {
+  width: 600px; height: 600px;
+  background: radial-gradient(circle, #5b1f9a 0%, transparent 70%);
+  bottom: -160px; right: -160px;
+  animation-delay: 0.3s;
+  animation-name: orb-appear, orb-drift2;
+  animation-duration: 1.4s, 24s;
+  animation-timing-function: ease-out, ease-in-out;
+  animation-fill-mode: forwards, none;
+  animation-iteration-count: 1, infinite;
+  animation-direction: normal, alternate;
+}
+.orb-3 {
+  width: 420px; height: 420px;
+  background: radial-gradient(circle, #075e79 0%, transparent 70%);
+  top: 35%; right: 25%;
+  animation-delay: 0.5s;
+  animation-name: orb-appear, orb-drift3;
+  animation-duration: 1.4s, 18s;
+  animation-timing-function: ease-out, ease-in-out;
+  animation-fill-mode: forwards, none;
+  animation-iteration-count: 1, infinite;
+  animation-direction: normal, alternate;
+}
+.orb-4 {
+  width: 300px; height: 300px;
+  background: radial-gradient(circle, #16533a 0%, transparent 70%);
+  top: 10%; left: 40%;
+  animation-delay: 0.7s;
+  animation-name: orb-appear, orb-drift1;
+  animation-duration: 1.4s, 26s;
+  animation-timing-function: ease-out, ease-in-out;
+  animation-fill-mode: forwards, none;
+  animation-iteration-count: 1, infinite;
+  animation-direction: normal, alternate-reverse;
+}
+
+@keyframes orb-appear {
+  from { opacity: 0; transform: scale(0.85); }
+  to { opacity: 0.32; transform: scale(1); }
+}
+@keyframes orb-drift1 {
+  from { transform: translate(0, 0); }
+  to { transform: translate(35px, 25px); }
+}
+@keyframes orb-drift2 {
+  from { transform: translate(0, 0); }
+  to { transform: translate(-28px, -35px); }
+}
+@keyframes orb-drift3 {
+  from { transform: translate(0, 0) scale(1); }
+  to { transform: translate(20px, -20px) scale(1.08); }
+}
+
+.rings {
+  position: fixed;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ring-wrap { position: absolute; }
+.ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid;
+  top: 50%; left: 50%;
+  animation: ring-spin linear infinite;
+}
+.r1 {
+  width: 920px; height: 920px;
+  border-color: rgba(56, 189, 248, 0.055);
+  margin: -460px 0 0 -460px;
+  animation-duration: 36s;
+}
+.r2 {
+  width: 680px; height: 680px;
+  border-color: rgba(139, 92, 246, 0.07);
+  margin: -340px 0 0 -340px;
+  animation-duration: 26s;
+  animation-direction: reverse;
+}
+.r3 {
+  width: 460px; height: 460px;
+  border-color: rgba(6, 182, 212, 0.065);
+  margin: -230px 0 0 -230px;
+  animation-duration: 20s;
+}
+
+@keyframes ring-spin {
+  to { transform: rotate(360deg); }
+}
+
+.login-wrap {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 460px;
+  padding: 20px;
+  animation: card-rise 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes card-rise {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.login-card {
+  background: rgba(6, 12, 30, 0.84);
+  backdrop-filter: blur(40px);
+  -webkit-backdrop-filter: blur(32px);
+  border: 8px solid rgba(56, 189, 248, 0.13);
+  border-radius: 28px;
+  padding: 2.75rem 2.5rem 2.25rem;
+  box-shadow:
+    0 0 0 1px rgba(0,0,0,0.5) inset,
+    0 32px 64px rgba(0,0,0,0.55),
+    0 0 80px rgba(56, 189, 248, 0.04);
+}
+
+.logo-zone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 28px;
+}
+.logo-img {
+  max-width: 380px;      
+  width: 100%;
+  height: auto;
+  max-height: 140px;    
+  object-fit: contain;
+  filter:
+    drop-shadow(0 0 16px rgba(56, 189, 248, 0.28))
+    drop-shadow(0 0 40px rgba(107, 70, 193, 0.15));
+  transition: filter 0.3s;
+}
+.logo-img:hover {
+  filter:
+    drop-shadow(0 0 22px rgba(56, 189, 248, 0.4))
+    drop-shadow(0 0 50px rgba(107, 70, 193, 0.22));
+}
+.logo-fallback {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+.logo-fallback .plane { font-size: 3.2rem; }  
+.logo-fallback .brand {
+  font-size: 2.6rem;                           
+  font-weight: 800;
+  color: #e2eaf5;
+  letter-spacing: -0.03em;
+}
+.logo-fallback .brand span { color: #38bdf8; }
+
+.tagline {
+  margin-top: 12px;
+  font-size: 0.845rem;
+  color: rgba(148, 163, 184, 0.65);
+  text-align: center;
+  line-height: 1.55;
+}
+
+.google-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 22px;
+  background: #ffffff;
+  border: none;
+  border-radius: 14px;
+  font-size: 0.975rem;
+  font-weight: 600;
+  color: #1a1a1a;
+  text-decoration: none;
+  cursor: pointer;
+  margin-bottom: 22px;
+  transition:
+    box-shadow 0.22s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.22s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.google-btn:hover {
+  box-shadow:
+    0 8px 30px rgba(0,0,0,0.4),
+    0 0 0 2px rgba(56, 189, 248, 0.3);
+  transform: translateY(-2px);
+  color: #1a1a1a;
+  text-decoration: none;
+}
+.google-btn:active { transform: translateY(0); transition-duration: 0.08s; }
+.google-logo { width: 22px; height: 22px; flex-shrink: 0; }
+
+.sep {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 0 18px;
+}
+.sep::before, .sep::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: rgba(255,255,255,0.055);
+}
+.sep span {
+  font-size: 0.7rem;
+  color: rgba(148, 163, 184, 0.35);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.chip-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+  margin-bottom: 22px;
+}
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 11px;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border: 1px solid;
+  white-space: nowrap;
+}
+.ch-blue   { background: rgba(56,189,248,0.08);  border-color: rgba(56,189,248,0.2);  color: #7dd3fc; }
+.ch-purple { background: rgba(139,92,246,0.08);  border-color: rgba(139,92,246,0.2);  color: #c4b5fd; }
+.ch-teal   { background: rgba(6,182,212,0.08);   border-color: rgba(6,182,212,0.2);   color: #67e8f9; }
+.ch-green  { background: rgba(34,197,94,0.08);   border-color: rgba(34,197,94,0.2);   color: #86efac; }
+.ch-orange { background: rgba(249,115,22,0.08);  border-color: rgba(249,115,22,0.2);  color: #fdba74; }
+
+.err-box {
+  background: rgba(239,68,68,0.1);
+  border: 1px solid rgba(239,68,68,0.22);
+  border-radius: 10px;
+  padding: 9px 14px;
+  font-size: 0.8rem;
+  color: #fca5a5;
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+.terms {
+  text-align: center;
+  font-size: 0.72rem;
+  color: rgba(148, 163, 184, 0.35);
+  line-height: 1.55;
+}
+</style>
+</head>
+<body>
+
+<canvas id="star-canvas"></canvas>
+
+<div class="orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
+</div>
+
+<div class="rings">
+  <div class="ring-wrap">
+    <div class="ring r1"></div>
+    <div class="ring r2"></div>
+    <div class="ring r3"></div>
+  </div>
+</div>
+
+<div class="login-wrap">
+  <div class="login-card">
+
+    <div class="logo-zone">
+      <img
+        src="/static/images/TripSwarm_Main_Logo.png"
+        alt="Trip Swarm"
+        class="logo-img"
+        onerror="this.style.display='none'; document.getElementById('fb').style.display='flex';"
+      />
+      <div id="fb" class="logo-fallback">
+        <span class="plane">✈️</span>
+        <span class="brand">Trip<span>Swarm</span></span>
+      </div>
+      <p class="tagline">Multi-Agent Travel Intelligence<br>Plan smarter. Explore further.</p>
+    </div>
+
+    <div class="err-box" id="auth-err" style="display:none;">
+      Authentication failed. Please try again.
+    </div>
+
+    <!-- Terms Modal -->
+
+    <div id="terms-modal" style="display:none; position:fixed; inset:0; z-index:100; background:rgba(0,0,0,0.7); backdrop-filter:blur(6px); align-items:center; justify-content:center; padding:16px;">
+      <div style="background:#0d1530; border:1px solid rgba(56,189,248,0.2); border-radius:20px; padding:2rem 1.75rem; max-width:400px; width:100%;">
+        
+        <h2 style="color:#e2eaf5; font-size:1.1rem; font-weight:700; margin-bottom:6px;">Before you continue</h2>
+        <p style="color:rgba(148,163,184,0.7); font-size:0.82rem; margin-bottom:20px; line-height:1.6;">
+          TripSwarm will access the following from your Google account to create and manage your profile:
+        </p>
+
+        <div style="display:flex; flex-direction:column; gap:10px; margin-bottom:20px;">
+          <div style="display:flex; align-items:center; gap:12px; background:rgba(56,189,248,0.06); border:1px solid rgba(56,189,248,0.12); border-radius:10px; padding:10px 14px;">
+            <span style="font-size:1.2rem;">👤</span>
+            <div>
+              <p style="color:#e2eaf5; font-size:0.82rem; font-weight:600; margin:0;">Full name</p>
+              <p style="color:rgba(148,163,184,0.6); font-size:0.75rem; margin:0;">Used to personalise your experience</p>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px; background:rgba(56,189,248,0.06); border:1px solid rgba(56,189,248,0.12); border-radius:10px; padding:10px 14px;">
+            <span style="font-size:1.2rem;">✉️</span>
+            <div>
+              <p style="color:#e2eaf5; font-size:0.82rem; font-weight:600; margin:0;">Email address</p>
+              <p style="color:rgba(148,163,184,0.6); font-size:0.75rem; margin:0;">Used as your account identifier</p>
+            </div>
+          </div>
+          <div style="display:flex; align-items:center; gap:12px; background:rgba(56,189,248,0.06); border:1px solid rgba(56,189,248,0.12); border-radius:10px; padding:10px 14px;">
+            <span style="font-size:1.2rem;">🖼️</span>
+            <div>
+              <p style="color:#e2eaf5; font-size:0.82rem; font-weight:600; margin:0;">Profile picture</p>
+              <p style="color:rgba(148,163,184,0.6); font-size:0.75rem; margin:0;">Displayed on your account avatar</p>
+            </div>
+          </div>
+        </div>
+
+        <p style="color:rgba(148,163,184,0.45); font-size:0.72rem; text-align:center; margin-bottom:16px; line-height:1.55;">
+          We never sell your data or share it with third parties.<br>
+          By continuing you agree to our <a href="/terms" style="color:#38bdf8; text-decoration:none;">Terms of Service</a>.
+        </p>
+
+        <div style="display:flex; gap:10px;">
+          <button onclick="closeTerms()" style="flex:1; padding:12px; background:transparent; border:1px solid rgba(255,255,255,0.1); border-radius:12px; color:rgba(148,163,184,0.7); font-size:0.875rem; cursor:pointer;">
+            Cancel
+          </button>
+          <a id="agree-btn" href="/auth/login?new=true" style="flex:2; padding:12px; background:#38bdf8; border-radius:12px; color:#06091a; font-size:0.875rem; font-weight:700; text-align:center; text-decoration:none; display:flex; align-items:center; justify-content:center;">
+            Agree &amp; Continue
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <button onclick="openTerms()" class="google-btn">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg"width="24" height="24"/>
+      Continue with Google
+    </button>
+
+    <div class="sep"><span>what you get</span></div>
+
+    <div class="chip-wrap">
+      <span class="chip ch-blue">✈ Flight Search</span>
+      <span class="chip ch-teal">🏨 Hotel Finder</span>
+      <span class="chip ch-green">🗺 Itinerary AI</span>
+      <span class="chip ch-purple">🤖 Multi-Agent</span>
+      <span class="chip ch-orange">💬 Travel RAG</span>
+      <span class="chip ch-blue">📄 Doc Upload</span>
+    </div>
+
+    <p class="terms">By continuing you agree to our terms of service.<br>Your data is never shared.</p>
+  </div>
+</div>
+
+<script>
+  if (new URLSearchParams(location.search).get('error') === 'auth_failed') {
+    document.getElementById('auth-err').style.display = 'block';
+  }
+
+  const canvas = document.getElementById('star-canvas');
+  const ctx = canvas.getContext('2d');
+
+  function resize() { canvas.width = innerWidth; canvas.height = innerHeight; }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const stars = Array.from({ length: 180 }, () => ({
+    x: Math.random(),
+    y: Math.random(),
+    r: 0.4 + Math.random() * 1.5,
+    baseAlpha: 0.12 + Math.random() * 0.55,
+    speed: 0.4 + Math.random() * 1.8,
+    phase: Math.random() * Math.PI * 2,
+    color: Math.random() > 0.8 ? [180, 210, 255] : [210, 225, 255],
+  }));
+
+  let t = 0;
+  (function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    for (const s of stars) {
+      const a = s.baseAlpha * (0.55 + 0.45 * Math.sin(t * s.speed * 0.006 + s.phase));
+      ctx.beginPath();
+      ctx.arc(s.x * canvas.width, s.y * canvas.height, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${s.color[0]},${s.color[1]},${s.color[2]},${a})`;
+      ctx.fill();
+    }
+    t++;
+    requestAnimationFrame(draw);
+  })();
+
+  function openTerms() {
+  const modal = document.getElementById('terms-modal');
+  modal.style.display = 'flex';
+}
+
+function closeTerms() {
+  const modal = document.getElementById('terms-modal');
+  modal.style.display = 'none';
+}
+
+// Close modal if user clicks outside it
+document.getElementById('terms-modal').addEventListener('click', function(e) {
+  if (e.target === this) closeTerms();
+});
+</script>
+</body>
+</html>

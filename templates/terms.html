@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Terms of Service – TripSwarm</title>
+
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.3/font/bootstrap-icons.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    :root {
+      --navy:     #0A1628;
+      --navy-mid: #122040;
+      --slate:    #1E3A5F;
+      --teal:     #00D4C8;
+      --teal-dim: #00a89e;
+      --gold:     #F5A623;
+      --white:    #F8F9FF;
+      --muted:    #8BA0BC;
+      --glass:    rgba(10,22,40,0.82);
+      --card-bg:  rgba(30,58,95,0.55);
+      --radius:   14px;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--navy);
+      color: var(--white);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4 { font-family: 'Syne', sans-serif; }
+
+    /* Navbar */
+
+    .ts-navbar {
+      position: sticky; top: 0;
+      z-index: 1000;
+      background: var(--glass);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(0,212,200,0.12);
+      padding: 0.6rem 0;
+    }
+    .navbar-brand {
+      font-family: 'Syne', sans-serif; font-weight: 800; font-size: 1.35rem;
+      color: var(--white); letter-spacing: -0.5px; text-decoration: none;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .navbar-brand span { color: var(--teal); }
+
+    .nav-back {
+      display: inline-flex; align-items: center; gap: 7px;
+      color: var(--muted); font-size: 0.85rem; font-weight: 500;
+      text-decoration: none; padding: 6px 12px; border-radius: 8px;
+      border: 1px solid rgba(0,212,200,0.15);
+      transition: color 0.2s, border-color 0.2s, background 0.2s;
+    }
+    .nav-back:hover {
+      color: var(--teal); border-color: rgba(0,212,200,0.4);
+      background: rgba(0,212,200,0.06);
+    }
+
+    /* Hero Page */
+
+    .page-hero {
+      padding: 4rem 0 2.5rem;
+      border-bottom: 1px solid rgba(0,212,200,0.08);
+    }
+    .page-hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: rgba(0,212,200,0.08); border: 1px solid rgba(0,212,200,0.2);
+      color: var(--teal); border-radius: 100px; padding: 5px 14px;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.8px;
+      text-transform: uppercase; margin-bottom: 1.2rem;
+    }
+    .page-hero h1 {
+      font-size: clamp(1.9rem, 4vw, 2.8rem);
+      font-weight: 800; letter-spacing: -1px; margin-bottom: 0.75rem;
+    }
+    .page-hero h1 span { color: var(--teal); }
+    .page-hero-meta {
+      display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+      color: var(--muted); font-size: 0.82rem; margin-top: 0.5rem;
+    }
+    .page-hero-meta-item { display: flex; align-items: center; gap: 6px; }
+    .page-hero-meta-item i { color: var(--teal); font-size: 0.88rem; }
+
+    /* Layout */
+
+    .terms-layout {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      gap: 3rem;
+      padding: 3rem 0 5rem;
+      align-items: start;
+    }
+
+    /* Toc */
+
+    .toc-panel {
+      position: sticky; top: 80px;
+    }
+    .toc-label {
+      font-size: 0.68rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 12px; padding-bottom: 8px;
+      border-bottom: 1px solid rgba(0,212,200,0.1);
+    }
+    .toc-list { list-style: none; padding: 0; margin: 0; }
+    .toc-list li { margin-bottom: 2px; }
+    .toc-list a {
+      display: block; color: var(--muted); text-decoration: none;
+      font-size: 0.8rem; padding: 5px 10px; border-radius: 7px;
+      border-left: 2px solid transparent;
+      transition: color 0.2s, background 0.2s, border-color 0.2s;
+      line-height: 1.45;
+    }
+    .toc-list a:hover { color: var(--white); background: rgba(255,255,255,0.04); }
+    .toc-list a.active { color: var(--teal); border-left-color: var(--teal); background: rgba(0,212,200,0.06); }
+
+    /* content */
+
+    .terms-content { min-width: 0; }
+
+    .terms-section {
+      margin-bottom: 3rem;
+      padding-bottom: 2.5rem;
+      border-bottom: 1px solid rgba(0,212,200,0.07);
+    }
+    .terms-section:last-child { border-bottom: none; margin-bottom: 0; }
+
+    .section-num {
+      display: inline-block;
+      font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--teal);
+      background: rgba(0,212,200,0.08); border: 1px solid rgba(0,212,200,0.18);
+      border-radius: 100px; padding: 3px 10px; margin-bottom: 10px;
+    }
+    .terms-section h2 {
+      font-size: 1.25rem; font-weight: 700;
+      margin-bottom: 1rem; letter-spacing: -0.3px;
+    }
+    .terms-section p {
+      color: rgba(248,249,255,0.78); font-size: 0.9rem;
+      line-height: 1.8; margin-bottom: 1rem;
+    }
+    .terms-section p:last-child { margin-bottom: 0; }
+
+    .terms-section ul, .terms-section ol {
+      color: rgba(248,249,255,0.78); font-size: 0.9rem;
+      line-height: 1.8; padding-left: 1.4rem; margin-bottom: 1rem;
+    }
+    .terms-section li { margin-bottom: 0.4rem; }
+    .terms-section strong { color: var(--white); font-weight: 600; }
+
+    /* Highlighted callout blocks */
+
+    .callout {
+      border-radius: 10px; padding: 16px 20px; margin: 1.2rem 0;
+      font-size: 0.87rem; line-height: 1.7;
+      display: flex; gap: 12px; align-items: flex-start;
+    }
+    .callout i { font-size: 1rem; flex-shrink: 0; margin-top: 2px; }
+    .callout-teal {
+      background: rgba(0,212,200,0.07); border: 1px solid rgba(0,212,200,0.18);
+      color: rgba(248,249,255,0.85);
+    }
+    .callout-teal i { color: var(--teal); }
+    .callout-gold {
+      background: rgba(245,166,35,0.07); border: 1px solid rgba(245,166,35,0.2);
+      color: rgba(248,249,255,0.85);
+    }
+    .callout-gold i { color: var(--gold); }
+
+    /* Acceptance footer */
+
+    .terms-footer-card {
+      background: var(--card-bg); border: 1px solid rgba(0,212,200,0.15);
+      border-radius: 16px; padding: 28px 32px;
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      margin-top: 2.5rem;
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 16px;
+    }
+    .terms-footer-card p { color: var(--muted); font-size: 0.82rem; margin: 0; line-height: 1.6; }
+    .terms-footer-card strong { color: var(--white); }
+    .btn-agree {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--teal); color: var(--navy);
+      font-weight: 700; font-size: 0.88rem; border: none;
+      border-radius: 10px; padding: 11px 24px; text-decoration: none;
+      white-space: nowrap; transition: background 0.2s, transform 0.15s;
+    }
+    .btn-agree:hover {
+      background: var(--teal-dim); color: var(--navy);
+      transform: translateY(-1px); text-decoration: none;
+    }
+
+    /* Footer */
+
+    .ts-footer {
+      background: rgba(10,22,40,0.98);
+      border-top: 1px solid rgba(0,212,200,0.1);
+      padding: 24px 0;
+    }
+    .ts-footer p { color: var(--muted); font-size: 0.78rem; margin: 0; }
+    .ts-footer a { color: var(--teal); text-decoration: none; }
+    .ts-footer a:hover { text-decoration: underline; }
+
+    @media (max-width: 768px) {
+      .terms-layout { grid-template-columns: 1fr; gap: 2rem; }
+      .toc-panel { position: static; display: none; }
+      .page-hero { padding: 2.5rem 0 1.5rem; }
+      .terms-footer-card { flex-direction: column; padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- Navbar -->
+
+<nav class="ts-navbar">
+  <div class="container">
+    <div class="d-flex align-items-center justify-content-between">
+      <a class="navbar-brand" href="/">
+        <img
+          src="/static/images/Trip_Swarm_Logo.png"
+          height="36" width="36" alt="TripSwarm"
+          onerror="this.style.display='none';"
+        />
+        Trip<span>Swarm</span>
+      </a>
+      <a href="/" class="nav-back">
+        <i class="bi bi-arrow-left"></i> Back to home
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Page -->
+
+<div class="page-hero">
+  <div class="container">
+    <div class="page-hero-eyebrow">
+      <i class="bi bi-file-earmark-text-fill"></i> Legal
+    </div>
+    <h1>Terms of <span>Service</span></h1>
+    <div class="page-hero-meta">
+      <div class="page-hero-meta-item">
+        <i class="bi bi-calendar3"></i>
+        <span>Effective date: 1 January 2025</span>
+      </div>
+      <div class="page-hero-meta-item">
+        <i class="bi bi-arrow-clockwise"></i>
+        <span>Last updated: 1 June 2025</span>
+      </div>
+      <div class="page-hero-meta-item">
+        <i class="bi bi-geo-alt-fill"></i>
+        <span>Governing law: India</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main -->
+
+<main class="container">
+  <div class="terms-layout">
+
+    <!-- TABLE OF CONTENTS -->
+    <aside class="toc-panel">
+      <div class="toc-label">On this page</div>
+      <ul class="toc-list" id="tocList">
+        <li><a href="#acceptance">1. Acceptance of terms</a></li>
+        <li><a href="#description">2. Service description</a></li>
+        <li><a href="#eligibility">3. Eligibility</a></li>
+        <li><a href="#google-auth">4. Google sign-in and your data</a></li>
+        <li><a href="#acceptable-use">5. Acceptable use</a></li>
+        <li><a href="#ai-content">6. AI-generated content</a></li>
+        <li><a href="#user-content">7. Your content and documents</a></li>
+        <li><a href="#privacy">8. Privacy</a></li>
+        <li><a href="#ip">9. Intellectual property</a></li>
+        <li><a href="#availability">10. Availability and changes</a></li>
+        <li><a href="#disclaimer">11. Disclaimers</a></li>
+        <li><a href="#liability">12. Limitation of liability</a></li>
+        <li><a href="#termination">13. Termination</a></li>
+        <li><a href="#governing-law">14. Governing law</a></li>
+        <li><a href="#contact">15. Contact</a></li>
+      </ul>
+    </aside>
+
+    <!-- Content -->
+    <article class="terms-content">
+
+      <!-- Intro callout -->
+      <div class="callout callout-teal" style="margin-bottom: 2.5rem;">
+        <i class="bi bi-info-circle-fill"></i>
+        <div>
+          <strong style="color:var(--white);">Please read these terms carefully.</strong>
+          By signing in with Google and using TripSwarm you agree to be bound by these Terms of Service. If you do not agree, do not use the service.
+        </div>
+      </div>
+
+      <!-- 1 -->
+      <div class="terms-section" id="acceptance">
+        <span class="section-num">01</span>
+        <h2>Acceptance of terms</h2>
+        <p>
+          These Terms of Service ("Terms") constitute a legally binding agreement between you ("User", "you", "your") and Saravanan S ("we", "us", "our"), the developer of TripSwarm, governing your access to and use of the TripSwarm web application available at its hosted URL (the "Service").
+        </p>
+        <p>
+          By clicking "Agree &amp; Continue", signing in, or otherwise accessing or using the Service, you acknowledge that you have read, understood, and agree to be bound by these Terms and our Privacy practices described herein. If you are using the Service on behalf of an organisation, you represent and warrant that you have authority to bind that organisation to these Terms.
+        </p>
+      </div>
+
+      <!-- 2 -->
+      <div class="terms-section" id="description">
+        <span class="section-num">02</span>
+        <h2>Service description</h2>
+        <p>
+          TripSwarm is an AI-powered travel planning application that uses a multi-agent architecture built on LangGraph to help users plan trips. The Service includes, but is not limited to:
+        </p>
+        <ul>
+          <li><strong>Trip Planner</strong> — an AI agent pipeline (flight research, hotel recommendations, itinerary planning) that generates personalised travel plans in response to natural-language prompts.</li>
+          <li><strong>Travel Q&amp;A (RAG)</strong> — a retrieval-augmented generation system that answers travel-related questions using a hybrid semantic and keyword search over user-uploaded documents and a base knowledge corpus.</li>
+          <li><strong>Document Management</strong> — the ability to upload, store, and delete personal travel documents (PDF, DOCX, TXT) used to enrich Q&amp;A responses.</li>
+          <li><strong>Saved Trips</strong> — persistent storage of AI-generated travel reports linked to your account.</li>
+          <li><strong>Chat History</strong> — persistent conversation threads stored and associated with your account.</li>
+        </ul>
+        <p>
+          The Service is provided as a portfolio and showcase project. It is not a commercial travel agency, licensed financial adviser, or booking platform, and does not guarantee the accuracy, availability, or price of any flight, hotel, or travel service mentioned in AI-generated output.
+        </p>
+      </div>
+
+      <!-- 3 -->
+      <div class="terms-section" id="eligibility">
+        <span class="section-num">03</span>
+        <h2>Eligibility</h2>
+        <p>
+          You must be at least 13 years of age to use the Service. If you are under 18, you confirm that you have your parent's or legal guardian's permission to use the Service and that they have reviewed and agreed to these Terms on your behalf.
+        </p>
+        <p>
+          Access to the Service requires a valid Google account. You are responsible for maintaining the security of your Google account and for all activity that occurs under it.
+        </p>
+      </div>
+
+      <!-- 4 -->
+      <div class="terms-section" id="google-auth">
+        <span class="section-num">04</span>
+        <h2>Google sign-in and your data</h2>
+        <p>When you sign in with Google, TripSwarm requests access to the following data from your Google account solely for the purposes described:</p>
+        <ul>
+          <li><strong>Full name</strong> — to personalise your in-app experience (e.g. displaying your name in the sidebar).</li>
+          <li><strong>Email address</strong> — used as your unique account identifier and stored in our database to associate your data with your account.</li>
+          <li><strong>Profile picture URL</strong> — displayed as your avatar inside the application.</li>
+        </ul>
+        <p>
+          We store your name, email address, and profile picture URL in a PostgreSQL database. We do not request or store access to your Google Drive, Gmail, contacts, or any other Google service. We do not request offline access or refresh tokens beyond what is necessary to maintain your session.
+        </p>
+        <div class="callout callout-teal">
+          <i class="bi bi-shield-lock-fill"></i>
+          <span>We never sell your personal data to third parties and we do not use it for advertising purposes.</span>
+        </div>
+        <p>
+          Your session is managed via a secure, HTTP-only JWT cookie. Sessions expire after a reasonable period of inactivity. You can revoke TripSwarm's access to your Google account at any time via your <a href="https://myaccount.google.com/permissions" target="_blank" rel="noopener noreferrer" style="color:var(--teal);">Google Account permissions page</a>.
+        </p>
+      </div>
+
+      <!-- 5 -->
+      <div class="terms-section" id="acceptable-use">
+        <span class="section-num">05</span>
+        <h2>Acceptable use</h2>
+        <p>You agree to use the Service only for lawful purposes and in a manner consistent with these Terms. You must not:</p>
+        <ul>
+          <li>Use the Service in any way that violates applicable local, national, or international law or regulation.</li>
+          <li>Submit any content that is unlawful, defamatory, harassing, abusive, fraudulent, infringing, or otherwise objectionable.</li>
+          <li>Attempt to probe, scan, or test the vulnerability of the Service or to breach any security or authentication measures.</li>
+          <li>Use automated scripts, bots, scrapers, or crawlers to access the Service in a manner that sends more request traffic than a human could reasonably produce.</li>
+          <li>Attempt to reverse-engineer, decompile, or derive the source code of the Service, except where permitted by applicable law.</li>
+          <li>Impersonate any person or entity or misrepresent your affiliation with any person or entity.</li>
+          <li>Upload documents that contain malware, or that you do not have the right to share.</li>
+          <li>Use the Service to generate content intended to deceive, defraud, or harm others.</li>
+        </ul>
+        <p>
+          We reserve the right to suspend or terminate access to any user who violates these provisions, without prior notice.
+        </p>
+      </div>
+
+      <!-- 6 -->
+      <div class="terms-section" id="ai-content">
+        <span class="section-num">06</span>
+        <h2>AI-generated content</h2>
+        <p>
+          TripSwarm uses large language models (currently Groq-hosted Llama models), external APIs (AviationStack, Tavily), and a retrieval pipeline to generate travel plans, answer questions, and produce reports. You acknowledge that:
+        </p>
+        <ul>
+          <li>AI-generated content may contain <strong>errors, inaccuracies, or outdated information</strong>. Flight schedules, hotel availability, prices, visa requirements, and travel advisories change frequently — always verify independently before making travel decisions or purchases.</li>
+          <li>The Service does <strong>not</strong> book flights, hotels, or any travel products on your behalf. Any information about specific airlines, accommodations, or prices is informational only and does not constitute a quote or offer.</li>
+          <li>The quality of AI responses depends on the clarity of your prompts and the information available at the time of generation.</li>
+          <li>We are not responsible for decisions you make based on AI-generated content.</li>
+        </ul>
+        <div class="callout callout-gold">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <span><strong style="color:var(--white);">Always verify travel information independently.</strong> Visa requirements, health advisories, and travel restrictions vary and change. Do not rely solely on TripSwarm output for safety-critical travel decisions.</span>
+        </div>
+      </div>
+
+      <!-- 7 -->
+      <div class="terms-section" id="user-content">
+        <span class="section-num">07</span>
+        <h2>Your content and documents</h2>
+        <p>
+          You may upload documents (PDFs, Word files, text files) to the Service to enhance Travel Q&amp;A responses. By uploading content you represent and warrant that:
+        </p>
+        <ul>
+          <li>You own the content or have the necessary rights and permissions to upload it.</li>
+          <li>The content does not infringe any intellectual property rights, privacy rights, or other rights of any third party.</li>
+          <li>The content does not contain viruses, malware, or malicious code.</li>
+        </ul>
+        <p>
+          You retain full ownership of any documents you upload. By uploading, you grant us a limited, non-exclusive, royalty-free licence to store and process your documents solely for the purpose of providing the RAG Q&amp;A feature to you. We do not use your documents to train AI models or share them with other users. Your documents are stored isolated to your account.
+        </p>
+        <p>
+          You can delete your uploaded documents at any time from the "My Docs" tab. Upon deletion, documents are removed from both our storage and the vector database index.
+        </p>
+      </div>
+
+      <!-- 8 -->
+      <div class="terms-section" id="privacy">
+        <span class="section-num">08</span>
+        <h2>Privacy</h2>
+        <p>We collect and store the following categories of data:</p>
+        <ul>
+          <li><strong>Account data</strong> — your name, email address, and profile picture URL from Google OAuth.</li>
+          <li><strong>Conversation data</strong> — your chat messages and AI responses, stored in PostgreSQL and associated with your account and thread IDs.</li>
+          <li><strong>Uploaded documents</strong> — files you upload, stored securely and indexed in ChromaDB for your RAG sessions.</li>
+          <li><strong>Trip reports</strong> — AI-generated travel reports saved to your account.</li>
+        </ul>
+        <p>
+          We do not sell, rent, or trade your personal data. We do not serve advertisements. Data is stored on infrastructure provided by Render.com. We implement reasonable technical and organisational security measures to protect your data, but no internet transmission or storage system is 100% secure.
+        </p>
+        <p>
+          You may request deletion of your account and all associated data by contacting us at the address in Section 15. We will process deletion requests within 30 days.
+        </p>
+      </div>
+
+      <!-- 9 -->
+      <div class="terms-section" id="ip">
+        <span class="section-num">09</span>
+        <h2>Intellectual property</h2>
+        <p>
+          The TripSwarm application, including its source code, design, branding, and documentation, is the intellectual property of Saravanan S and is made available as an open-source showcase project. The source code is available on GitHub under the terms of its respective licence.
+        </p>
+        <p>
+          AI-generated travel plans and reports produced by the Service in response to your prompts are provided to you for your personal, non-commercial use. We make no copyright claim over AI-generated output produced for you.
+        </p>
+        <p>
+          "TripSwarm" and the TripSwarm logo are identifiers of the project. You may not use them to imply endorsement or affiliation without written permission.
+        </p>
+      </div>
+
+      <!-- 10 -->
+      <div class="terms-section" id="availability">
+        <span class="section-num">10</span>
+        <h2>Availability and changes</h2>
+        <p>
+          TripSwarm is a portfolio project hosted on Render's free/hobby tier. We do not guarantee any specific level of uptime, availability, or performance. The Service may be unavailable due to maintenance, infrastructure limits, or circumstances beyond our control.
+        </p>
+        <p>
+          We reserve the right to modify, suspend, or discontinue the Service (or any part of it) at any time, with or without notice. We may update these Terms from time to time. Material changes will be indicated by updating the "Last updated" date at the top of this page. Continued use of the Service after a change constitutes acceptance of the revised Terms.
+        </p>
+      </div>
+
+      <!-- 11 -->
+      <div class="terms-section" id="disclaimer">
+        <span class="section-num">11</span>
+        <h2>Disclaimers</h2>
+        <p>
+          THE SERVICE IS PROVIDED ON AN "AS IS" AND "AS AVAILABLE" BASIS, WITHOUT WARRANTIES OF ANY KIND, EITHER EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, NON-INFRINGEMENT, OR ACCURACY OF INFORMATION.
+        </p>
+        <p>
+          We do not warrant that the Service will be uninterrupted, error-free, or free from viruses or other harmful components. We do not warrant the accuracy, completeness, or usefulness of any AI-generated content.
+        </p>
+      </div>
+
+      <!-- 12 -->
+      <div class="terms-section" id="liability">
+        <span class="section-num">12</span>
+        <h2>Limitation of liability</h2>
+        <p>
+          TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, IN NO EVENT SHALL SARAVANAN S BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES (INCLUDING, WITHOUT LIMITATION, LOSS OF PROFITS, DATA, OR GOODWILL) ARISING OUT OF OR IN CONNECTION WITH YOUR USE OF, OR INABILITY TO USE, THE SERVICE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+        </p>
+        <p>
+          Our total aggregate liability to you for any claims arising under or in connection with these Terms or the Service shall not exceed INR 100 (one hundred Indian rupees) or the amount you have paid us in the past 12 months, whichever is greater.
+        </p>
+        <p>
+          Some jurisdictions do not allow the exclusion or limitation of certain damages — in such jurisdictions our liability is limited to the fullest extent permitted by law.
+        </p>
+      </div>
+
+      <!-- 13 -->
+      <div class="terms-section" id="termination">
+        <span class="section-num">13</span>
+        <h2>Termination</h2>
+        <p>
+          You may stop using the Service at any time. You can also request deletion of your account and data by contacting us (see Section 15).
+        </p>
+        <p>
+          We may suspend or permanently terminate your access to the Service at our sole discretion, without prior notice, if we reasonably believe you have violated these Terms, misused the Service, or for any other reason we deem appropriate. Upon termination, your right to use the Service ceases immediately.
+        </p>
+        <p>
+          Sections 7, 9, 11, 12, and 14 survive termination.
+        </p>
+      </div>
+
+      <!-- 14 -->
+      <div class="terms-section" id="governing-law">
+        <span class="section-num">14</span>
+        <h2>Governing law</h2>
+        <p>
+          These Terms are governed by and construed in accordance with the laws of India, without regard to its conflict of law provisions. Any dispute arising out of or in connection with these Terms or the Service that cannot be resolved amicably shall be subject to the exclusive jurisdiction of the courts located in Tamil Nadu, India.
+        </p>
+      </div>
+
+      <!-- 15 -->
+      <div class="terms-section" id="contact">
+        <span class="section-num">15</span>
+        <h2>Contact</h2>
+        <p>
+          If you have any questions about these Terms, wish to exercise any rights over your data, or need to contact us for any other reason, please reach out through any of the channels below:
+        </p>
+        <ul>
+          <li><strong>GitHub:</strong> <a href="https://github.com/Saravanan131201" target="_blank" rel="noopener noreferrer" style="color:var(--teal);">github.com/Saravanan131201</a></li>
+          <li><strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/saravanan-s1312" target="_blank" rel="noopener noreferrer" style="color:var(--teal);">linkedin.com/in/saravanan-s1312</a></li>
+          <li><strong>Project source:</strong> <a href="https://github.com/Saravanan131201/Tripswarm-using-Langgraph" target="_blank" rel="noopener noreferrer" style="color:var(--teal);">Tripswarm-using-Langgraph</a></li>
+        </ul>
+      </div>
+
+      <!-- Acceptance card -->
+      <div class="terms-footer-card">
+        <div>
+          <strong>Ready to start planning?</strong>
+          <p style="margin-top:4px;">By signing in you confirm you've read and agree to these Terms of Service.</p>
+        </div>
+        <a href="/auth/login" class="btn-agree">
+          <i class="bi bi-google"></i> Agree &amp; sign in
+        </a>
+      </div>
+
+    </article>
+  </div>
+</main>
+
+<!-- Footer -->
+<footer class="ts-footer">
+  <div class="container d-flex align-items-center justify-content-between flex-wrap gap-2">
+    <p>© 2025 TripSwarm · Built by <a href="https://github.com/Saravanan131201" target="_blank">Saravanan S</a></p>
+    <p><a href="/">← Back to home</a></p>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+<script>
+  /* Highlight active TOC item on scroll */
+  const sections = document.querySelectorAll('.terms-section[id]');
+  const links    = document.querySelectorAll('.toc-list a');
+
+  function setActive() {
+    let current = '';
+    sections.forEach(sec => {
+      if (window.scrollY >= sec.offsetTop - 120) current = sec.id;
+    });
+    links.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  }
+
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+</script>
+</body>
+</html>
