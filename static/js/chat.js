@@ -4,8 +4,8 @@ const MOBILE_BP = 768;
 const LS_KEY    = 'tripswarm_sidebar_collapsed';
 const isMobile  = () => window.innerWidth <= MOBILE_BP;
 
-/* Sidebar Toggle
-/* Restore saved state immediately (before paint) */
+//  Sidebar Toggle
+// Restore saved state immediately (before paint) 
 (function () {
   if (!isMobile() && localStorage.getItem(LS_KEY) === '1') {
     document.getElementById('app-shell').classList.add('sidebar-collapsed');
