@@ -54,7 +54,7 @@ llm = ChatGroq(
     api_key=GROQ_API_KEY,
     model="openai/gpt-oss-120b",
     temperature=0.25,
-    max_tokens=300,
+    max_tokens=768,
 )
 
 
